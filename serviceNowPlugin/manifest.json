@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "SNOW x Eko Assistant",
+    "version": "1.0.0",
+    "description": "ServiceNow 对话式助手：Eko 驱动 + 常用场景一键触发",
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "SNOW x Eko Assistant"
+    },
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "permissions": ["storage", "notifications", "alarms"],
+    "host_permissions": [
+      "*://*.service-now.com/*",
+      "http://localhost/*",
+      "https://*/eko/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "icons": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "128": "icons/icon128.png"
+    }
+  }
+  

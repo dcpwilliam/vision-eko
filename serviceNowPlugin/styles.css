@@ -1,0 +1,63 @@
+:root{
+    --bg:#f6f3ff;
+    --card:#ffffff;
+    --primary:#7c6be6;      /* 淡紫主色 */
+    --primary-weak:#e7e3ff; /* 浅紫背景 */
+    --text:#2b2b35;
+    --muted:#7a7a8a;
+    --ring: rgba(124,107,230,0.35);
+    --radius:14px;
+  }
+  
+  *{ box-sizing:border-box; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  
+  body.app{
+    margin:0; background:linear-gradient(180deg, var(--bg), #fff);
+    color:var(--text); width:380px; min-height:560px;
+  }
+  
+  .app__header{
+    padding:14px 16px; background:var(--card); border-bottom:1px solid #eee; position:sticky; top:0;
+  }
+  
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand__dot{
+    width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, var(--primary), #b6aef3);
+    box-shadow: 0 0 12px var(--ring);
+  }
+  .brand__name{ font-weight:700; letter-spacing:0.3px; }
+  
+  .quick-actions{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px 12px 0;
+  }
+  .qa-btn{
+    padding:12px; border:none; border-radius:var(--radius);
+    background:var(--primary-weak); color:var(--text); cursor:pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04), inset 0 0 0 1px #edeafc;
+    transition: transform .08s ease, box-shadow .2s ease;
+  }
+  .qa-btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+  .qa-btn:active{ transform: translateY(0); }
+  
+  .chat{ padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .chat__log{
+    background:var(--card); border-radius:var(--radius); padding:10px; height:330px; overflow:auto; box-shadow: inset 0 0 0 1px #f1effc;
+  }
+  .msg{ padding:10px 12px; border-radius:12px; margin:6px 0; max-width:92%; line-height:1.4; }
+  .msg--user{ background:var(--primary-weak); margin-left:auto; }
+  .msg--bot{ background:#faf9ff; border:1px solid #efecff; }
+  
+  .chat__input-row{ display:flex; gap:8px; }
+  .chat__input{
+    flex:1; padding:12px; border-radius:999px; border:1px solid #e8e5ff; outline:none;
+    box-shadow: 0 0 0 3px transparent; transition: box-shadow .15s ease;
+  }
+  .chat__input:focus{ box-shadow: 0 0 0 3px var(--ring); }
+  .chat__send{
+    padding:10px 14px; border-radius:999px; border:none; background:var(--primary); color:#fff; cursor:pointer;
+    box-shadow: 0 6px 14px rgba(124,107,230,0.25);
+  }
+  .app__footer{ padding:8px 12px 14px; color:var(--muted); font-size:12px; text-align:right; }
+  .link{ color:var(--primary); text-decoration:none; }
+  

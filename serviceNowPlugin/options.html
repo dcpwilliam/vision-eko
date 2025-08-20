@@ -1,0 +1,37 @@
+<!-- options.html -->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+  <title>SNOW x Eko 配置</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="app" style="padding:16px; width:520px;">
+  <h2>连接设置</h2>
+  <div style="display:grid; gap:10px;">
+    <label>ServiceNow 实例 URL（如 https://yourdomain.service-now.com）
+      <input id="snowUrl" class="chat__input" placeholder="https://xxx.service-now.com">
+    </label>
+    <label>认证方式
+      <select id="authType" class="chat__input">
+        <option value="oauth">OAuth Bearer Token</option>
+        <option value="basic">Basic（用户名密码）</option>
+      </select>
+    </label>
+    <label>OAuth Token（若选 OAuth）
+      <input id="oauthToken" class="chat__input" placeholder="Bearer token">
+    </label>
+    <label>用户名（若选 Basic）
+      <input id="username" class="chat__input" placeholder="username">
+    </label>
+    <label>密码（若选 Basic）
+      <input id="password" class="chat__input" type="password" placeholder="password">
+    </label>
+    <label>Eko 引擎 API（如 http://localhost:8080/eko/run）
+      <input id="ekoUrl" class="chat__input" placeholder="http://localhost:8080/eko/run">
+    </label>
+    <button id="save" class="chat__send">保存</button>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

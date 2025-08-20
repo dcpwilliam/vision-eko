@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>SNOW x Eko Assistant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="app">
+  <header class="app__header">
+    <div class="brand">
+      <div class="brand__dot"></div>
+      <div class="brand__name">SNOW x Eko</div>
+    </div>
+  </header>
+
+  <section class="quick-actions">
+    <button class="qa-btn" id="qa-incident">一键报障</button>
+    <button class="qa-btn" id="qa-reset">重置密码</button>
+    <button class="qa-btn" id="qa-access">申请访问</button>
+    <button class="qa-btn" id="qa-onboard">新员工入职</button>
+  </section>
+
+  <section class="chat">
+    <div id="chat-log" class="chat__log"></div>
+    <div class="chat__input-row">
+      <input id="chat-input" class="chat__input" placeholder="描述你的问题或指令，例如：为张三创建邮箱访问工单…" />
+      <button id="chat-send" class="chat__send">发送</button>
+    </div>
+  </section>
+
+  <footer class="app__footer">
+    <a href="options.html" target="_blank" class="link">配置</a>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
