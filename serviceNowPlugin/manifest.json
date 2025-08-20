@@ -15,7 +15,9 @@
     "host_permissions": [
       "*://*.service-now.com/*",
       "http://localhost/*",
-      "https://*/eko/*"
+      "https://*/eko/*",
+      "https://openrouter.ai/*",
+      "https://api.openrouter.ai/*"
     ],
     "background": {
       "service_worker": "background.js"

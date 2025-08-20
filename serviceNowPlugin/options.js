@@ -6,7 +6,10 @@ document.getElementById('save').addEventListener('click', async () => {
       oauthToken: document.getElementById('oauthToken').value.trim(),
       username: document.getElementById('username').value.trim(),
       password: document.getElementById('password').value,
-      ekoUrl: document.getElementById('ekoUrl').value.trim()
+      ekoUrl: document.getElementById('ekoUrl').value.trim(),
+      openrouterApiKey: document.getElementById('openrouterApiKey').value.trim(),
+      openrouterModel: document.getElementById('openrouterModel').value.trim(),
+      openrouterBase: document.getElementById('openrouterBase').value.trim()
     };
     await chrome.storage.sync.set(cfg);
     alert('已保存');

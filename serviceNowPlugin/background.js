@@ -18,43 +18,120 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         const r = await self.orderCatalogItem(msg.payload);
         sendResponse({ ok:true, data:r });
       } else if(msg.type === 'EKO_CHAT'){
-        const cfg = await chrome.storage.sync.get(['ekoUrl']);
-        if(!cfg.ekoUrl) throw new Error('未配置 Eko 引擎 API');
+        const cfg = await chrome.storage.sync.get(['openrouterApiKey','openrouterModel','openrouterBase']);
+        if(!cfg.openrouterApiKey) throw new Error('未配置 OpenRouter API Key');
 
-        // 将可用“工具”Schema告知 Eko，引擎可在链路中调用
+        // OpenAI Function Calling 兼容的 tools（JSON Schema）
         const tools = [
-          { name:'createIncident', description:'创建报障工单', args:['short_description','description','urgency','impact','category'] },
-          { name:'orderCatalogItem', description:'下单目录项（密码重置/权限申请/入职）', args:['itemSysId','variables'] },
-          { name:'searchKnowledge', description:'搜索知识库', args:['query','limit'] },
-          { name:'createChange', description:'创建变更请求', args:['short_description','description','type'] }
+          {
+            type: 'function',
+            function: {
+              name: 'createIncident',
+              description: '创建报障工单',
+              parameters: {
+                type: 'object',
+                properties: {
+                  short_description: { type: 'string' },
+                  description: { type: 'string' },
+                  urgency: { type: 'string' },
+                  impact: { type: 'string' },
+                  category: { type: 'string' }
+                },
+                required: ['short_description','description']
+              }
+            }
+          },
+          {
+            type: 'function',
+            function: {
+              name: 'orderCatalogItem',
+              description: '下单目录项（密码重置/权限申请/入职）',
+              parameters: {
+                type: 'object',
+                properties: {
+                  itemSysId: { type: 'string' },
+                  variables: { type: 'object', additionalProperties: true }
+                },
+                required: ['itemSysId']
+              }
+            }
+          },
+          {
+            type: 'function',
+            function: {
+              name: 'searchKnowledge',
+              description: '搜索知识库',
+              parameters: {
+                type: 'object',
+                properties: {
+                  query: { type: 'string' },
+                  limit: { type: 'number' }
+                },
+                required: ['query']
+              }
+            }
+          },
+          {
+            type: 'function',
+            function: {
+              name: 'createChange',
+              description: '创建变更请求',
+              parameters: {
+                type: 'object',
+                properties: {
+                  short_description: { type: 'string' },
+                  description: { type: 'string' },
+                  type: { type: 'string' }
+                },
+                required: ['short_description','description']
+              }
+            }
+          }
         ];
 
-        const res = await fetch(cfg.ekoUrl, {
+        const base = (cfg.openrouterBase || 'https://openrouter.ai/api/v1').replace(/\/$/, '');
+        const url = base + '/chat/completions';
+        const model = cfg.openrouterModel || 'openai/gpt-4o-mini';
+
+        const res = await fetch(url, {
           method:'POST',
-          headers:{ 'Content-Type':'application/json' },
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${cfg.openrouterApiKey}`,
+            'X-Title': 'SNOW x Eko Assistant'
+          },
           body: JSON.stringify({
-            query: msg.text,
+            model,
+            messages: [
+              { role:'system', content: 'You are an assistant integrated with ServiceNow. When necessary, request function calls to perform actions. Keep responses concise in Chinese.' },
+              { role:'user', content: msg.text }
+            ],
             tools,
-            // 可选：让 Eko 通过 toolCall 回调再由 extension 执行
-            mode: 'tool-calls-via-extension'
+            tool_choice: 'auto'
           })
         });
-        const data = await res.json();
+        const orData = await res.json();
+        const choice = orData.choices?.[0] || {};
+        const message = choice.message || {};
+        const reply = message.content || '';
+        const toolCalls = message.tool_calls || [];
 
-        // 如果 Eko 返回 toolCalls，就在此执行 ServiceNow API，并把结果回传给 Eko（或直接整合到回复里）
-        if (data.toolCalls?.length) {
-          const results = [];
-          for (const call of data.toolCalls) {
+        const results = [];
+        if (toolCalls.length) {
+          for (const call of toolCalls) {
+            const name = call.function?.name;
+            let args = {};
+            try { args = JSON.parse(call.function?.arguments || '{}'); } catch(_) {}
             let out;
-            if (call.name === 'createIncident') out = await self.createIncident(call.args);
-            if (call.name === 'orderCatalogItem') out = await self.orderCatalogItem(call.args);
-            if (call.name === 'searchKnowledge') out = await self.searchKnowledge(call.args);
-            if (call.name === 'createChange') out = await self.createChange(call.args);
-            results.push({ id: call.id, output: out });
+            if (name === 'createIncident') out = await self.createIncident(args);
+            if (name === 'orderCatalogItem') out = await self.orderCatalogItem(args);
+            if (name === 'searchKnowledge') out = await self.searchKnowledge(args);
+            if (name === 'createChange') out = await self.createChange(args);
+            results.push({ id: call.id || String(results.length+1), output: out });
           }
-          data.toolResults = results;
         }
 
+        const data = { reply, toolCalls, toolResults: results };
         sendResponse({ ok:true, data });
       } else {
         sendResponse({ ok:false, error:'Unknown message type' });

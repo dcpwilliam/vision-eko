@@ -27,9 +27,21 @@
     <label>密码（若选 Basic）
       <input id="password" class="chat__input" type="password" placeholder="password">
     </label>
-    <label>Eko 引擎 API（如 http://localhost:8080/eko/run）
+    <label>Eko 引擎 API（可选，用于兼容）
       <input id="ekoUrl" class="chat__input" placeholder="http://localhost:8080/eko/run">
     </label>
+
+    <h3>OpenRouter 设置</h3>
+    <label>OpenRouter API Key
+      <input id="openrouterApiKey" class="chat__input" type="password" placeholder="sk-or-...">
+    </label>
+    <label>OpenRouter 模型（如 openai/gpt-4o-mini）
+      <input id="openrouterModel" class="chat__input" placeholder="openai/gpt-4o-mini">
+    </label>
+    <label>OpenRouter Base（可选，默认 https://openrouter.ai/api/v1）
+      <input id="openrouterBase" class="chat__input" placeholder="https://openrouter.ai/api/v1">
+    </label>
+
     <button id="save" class="chat__send">保存</button>
   </div>
   <script src="options.js"></script>
