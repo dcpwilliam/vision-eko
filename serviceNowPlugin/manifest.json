@@ -1,11 +1,11 @@
 {
     "manifest_version": 3,
-    "name": "SNOW x Eko Assistant",
+    "name": "EKO x ServiceNow",
     "version": "1.0.0",
     "description": "ServiceNow 对话式助手：Eko 驱动 + 常用场景一键触发",
     "action": {
       "default_popup": "popup.html",
-      "default_title": "SNOW x Eko Assistant"
+      "default_title": "EKO x ServiceNow"
     },
     "options_ui": {
         "page": "options.html",

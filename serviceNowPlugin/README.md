@@ -33,6 +33,8 @@
 - Eko 引擎：根据用户自然语言与工具 Schema 决策是否调用某个“工具”（ServiceNow API）。
 - ServiceNow：提供工单、目录项、知识库、变更等 REST 接口。
 
+![运行时架构](Readme/network.png)
+
 ### 消息与数据流
 1. 用户在 Popup 输入问题或点击快捷按钮。
 2. Popup 发送 `chrome.runtime.sendMessage` 到 Background。
@@ -71,6 +73,8 @@ erviceNowPlugin/
   - 封装方法：`createIncident`、`orderCatalogItem`、`searchKnowledge`、`createChange`。
 - `popup.js`：发送 `EKO_CHAT`，并提供四个快捷按钮。
 - `options.js`：保存配置到 `chrome.storage.sync`：`snowUrl`, `authType`, `oauthToken`, `username`, `password`, `ekoUrl`。
+
+![一键报障示例](Readme/一键报障.png)
 
 ## Eko API 使用说明
 
@@ -119,6 +123,8 @@ Background 执行后回填：
 
 ## ServiceNow API 使用说明
 
+![ServiceNow 接口示意](Readme/serviceNow1.png)
+
 ### 认证方式（Options 可选）
 - OAuth Bearer（推荐生产）
 - Basic（仅测试/低风险环境）
@@ -166,6 +172,8 @@ curl "$SNOW/api/now/table/kb_knowledge?sysparm_query=short_descriptionLIKEVPN^OR
 - `OAuth Token` 或 `用户名/密码`
 - `Eko 引擎 API`（例 `http://localhost:8080/eko/run`）
 - 保存后写入：`snowUrl`, `authType`, `oauthToken`, `username`, `password`, `ekoUrl`
+
+![后台配置](Readme/后台配置.png)
 
 ### 打包说明（servicenow-bundle.js）
 - `background.js` 通过 `importScripts('servicenow-bundle.js')` 注入 API。
